@@ -8,11 +8,11 @@ $errors = array();
 if(!file_exists($HTPASSWD_FP)){
     $fh = @fopen($HTPASSWD_FP, 'w');
     if($fh){
-        $messages[] = "Password file has been created successfully";
+        $messages[] = "Файл паролей успешно создан";
         fclose($fh);
     }
     else{
-        $errors[] = "Unable to create the password file";
+        $errors[] = "Ошибка создания файла с паролями";
     }
 }
 
@@ -37,18 +37,18 @@ if(array_key_exists('action', $_REQUEST)){
                 try {
                     $htpasswd = new Htpasswd($HTPASSWD_FP);
                     $htpasswd->addUser($username, $password, Htpasswd::ENCTYPE_MD5);
-                    $messages[] = "User has been added successfully";
+                    $messages[] = "Новый пользователь успешно добавлен";
                     $users[] = $username;
                 } catch (Exception $e) {
                     $errors[] = $e->getMessage();
                 }
             }
             else{
-                $errors[] = "User $username already exists";
+                $errors[] = "Пользователь $username уже существует";
             }
         }
         else{
-            $errors[] = "Username or password not set";
+            $errors[] = "Имя пользователя или пароль не указаны";
         }
     }
     if($_REQUEST['action'] == "delete"){
@@ -58,14 +58,14 @@ if(array_key_exists('action', $_REQUEST)){
                 try {
                     $htpasswd = new Htpasswd($HTPASSWD_FP);
                     $htpasswd->deleteUser($username);
-                    $messages[] = "User $username has been removed successfully";
+                    $messages[] = "Пользователь $username успешно удален";
                     unset($users[$key]);
                 } catch (Exception $e) {
                     $errors[] = $e->getMessage();
                 }
             }
             else{
-                $errors[] = "User $username not found";
+                $errors[] = "Пользователь $username не найден";
             }
         }
 
@@ -77,8 +77,8 @@ if(array_key_exists('action', $_REQUEST)){
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Icecast password manager</title>
-        <meta name="description" content="Icecast password manager">
+        <title>Icecast менеджер паролей</title>
+        <meta name="description" content="Icecast менеджер паролей">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="./css/sweetalert.css">
         <style>
@@ -91,7 +91,7 @@ if(array_key_exists('action', $_REQUEST)){
 
         <div class="row">
             <div class="col-md-12">
-                <h3>Icecast password manager</h3>
+                <h3>Icecast менеджер паролей</h3>
                 <?php
                 foreach ($messages as $msg){
                     print "<p class=\"alert alert-success\">$msg</p>";
@@ -109,7 +109,7 @@ if(array_key_exists('action', $_REQUEST)){
                 <table class="table table-hover">
                     <tr>
                         <th>
-                            Username
+                            Логин
                         </th>
                         <th>
                             &nbsp;
@@ -118,11 +118,11 @@ if(array_key_exists('action', $_REQUEST)){
                     <?php
                     if(count($users)){
                         foreach ($users as $u){
-                            print "<tr><td>$u</td><td align=\"right\"><button class=\"delete_user btn btn-warning\" data-username=\"$u\">Delete</button></td></tr>";
+                            print "<tr><td>$u</td><td align=\"right\"><button class=\"delete_user btn btn-warning\" data-username=\"$u\">Удалить</button></td></tr>";
                         }
                     }
                     else{
-                         print "<tr><td colspan=\"2\">User list is empty</td></tr>";
+                         print "<tr><td colspan=\"2\">Список пользователей пуст</td></tr>";
                     }
                     ?>
                 </table>
@@ -134,21 +134,21 @@ if(array_key_exists('action', $_REQUEST)){
                     <fieldset>
 
                         <!-- Form Name -->
-                        <legend>Add new user</legend>
+                        <legend>Добавить нового пользователя</legend>
 
                         <!-- Text input-->
                         <div class="form-group" id="group-newusername">
-                            <label class="col-md-4 control-label" for="new-username">Username</label>
+                            <label class="col-md-4 control-label" for="new-username">Логин</label>
                             <div class="col-md-4">
                                 <input id="new-username" name="username" type="text" placeholder="" class="form-control input-md" required="">
-                                <span class="help-block">Latin characters only</span>
+                                <span class="help-block">Латинскими буквами</span>
                             </div>
                         </div>
 
 
                         <!-- Text input-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="passwd">Password</label>
+                            <label class="col-md-4 control-label" for="passwd">Пароль</label>
                             <div class="col-md-4">
                                 <input id="passwd" name="passwd" type="text" placeholder="" class="form-control input-md" required="">
                             </div>
@@ -158,7 +158,7 @@ if(array_key_exists('action', $_REQUEST)){
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="singlebutton"></label>
                             <div class="col-md-4">
-                                <button id="singlebutton" name="singlebutton" class="btn btn-primary">Add user</button>
+                                <button id="singlebutton" name="singlebutton" class="btn btn-primary">Добавить пользователя</button>
                             </div>
                         </div>
 
@@ -178,12 +178,12 @@ if(array_key_exists('action', $_REQUEST)){
                  if(username){
                      swal(
                          {
-                             title: "Are you sure?",
-                                 text: "User " + username + " will be removed",
+                             title: "Вы уверены?",
+                                 text: "Пользователь " + username + " будет удален",
                                  type: "warning",
                                  showCancelButton: true,
                                  confirmButtonColor: "#DD6B55",
-                                 confirmButtonText: "Yes!",
+                                 confirmButtonText: "Да!",
                                  closeOnConfirm: true
                                  }, function(){
                                      window.location = window.location.pathname + "?action=delete&username=" + username;
@@ -203,7 +203,7 @@ if(array_key_exists('action', $_REQUEST)){
                      $('#group-newusername').addClass('has-error');
                      $('#new-username').select();
                      $('#new-username').focus();
-                     $('#new-username').after('<span id="help-newusername" class="help-block">Username exists</span>');
+                     $('#new-username').after('<span id="help-newusername" class="help-block">Пользователь уже существует</span>');
                      e.preventDefault();
                  }
                  else if(!/[a-zA-Z0-9_]/.test(newUsername)){
